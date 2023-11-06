@@ -18,7 +18,7 @@ namespace transformatek_MP.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("jdbc:sqlite:/home/salah/Desktop/transformatek_MP/Database/tt_mp_db");
+            optionsBuilder.UseSqlite("Data Source=/home/salah/Desktop/transformatek_MP/Database/tt_mp_db");
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,17 +26,13 @@ namespace transformatek_MP.Data
             modelBuilder.Entity<Affectation>()
               .HasOne(a => a.Consigner)
               .WithOne()
-              .HasForeignKey<Affectation>(a => a.Consigner_ID);
+              .HasForeignKey<Affectation>(a => a.Consigner_ID)
 
-            modelBuilder.Entity<Affectation>()
-            .HasOne(b => b.Point)
-            .WithOne()
-            .HasForeignKey<Affectation>(b => b.Point_ID);
 
-            modelBuilder.Entity<Point>()
-            .HasOne(d => d.Affectation)
-            .WithOne()
-            .HasForeignKey<Affectation>(d => d.Affectation_ID);
+            // modelBuilder.Entity<Point>()
+            // .HasOne(d => d.Affectation)
+            // .WithOne()
+            // .HasForeignKey<Affectation>(d => d.Affectation_ID);
 
             modelBuilder.Entity<Consigner>()
               .HasOne(c => c.Affectation)
