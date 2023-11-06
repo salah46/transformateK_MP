@@ -1,11 +1,15 @@
+using System.ComponentModel.DataAnnotations;
 namespace transformatek_MP.Models
 {
     public class Point
     {
-        public string Address { get; set; }
-        //this is the key of the point in DB (below) that represent the cordonates
-        public string Id { get; set; } // 
-        public string Affectation_Id { get; set; }
-        
+        [Key]
+        public string? Point_ID { get; set; } //Id of Point
+        public float Lat { get; set; }
+        public float Lang { get; set; }
+
+        public string Affectation_ID { get; set; }//Foreign key prop
+        public Affectation Affectation { get; set; }
+
     }
 }

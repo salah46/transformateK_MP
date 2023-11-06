@@ -1,10 +1,15 @@
+using System.ComponentModel.DataAnnotations;
 namespace transformatek_MP.Models
 {
-    class Consigner
+    public class Consigner
     {
-        public string Consigner_ID { get; set; } //ID
+        [Key]
+        public string? Consigner_ID { get; set; } //ID
         public string Type_mesure { get; set; }
         public int Nb_Repetations { get; set; }
+
+        public string Affectation_ID { get; set; }//Foreign key prop
+        public Affectation Affectation { get; set; } //ID
 
 
 

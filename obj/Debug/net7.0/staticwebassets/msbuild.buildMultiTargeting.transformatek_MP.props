@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/transformatek_MP.props" />
+</Project>
