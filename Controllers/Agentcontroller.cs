@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using transformatek_MP.Models;
+using transformatek_MP.Data;
+using System.Threading.Tasks.Dataflow;
 namespace transformatek_MP.Controllers
 {
 
@@ -7,11 +9,16 @@ namespace transformatek_MP.Controllers
     [ApiController]
     public class AgentController : ControllerBase
     {
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
+        private readonly TransforamTek_MP_Context _contxt;
+        public  AgentController(TransforamTek_MP_Context contxt){
+            _contxt = contxt;
+        }
 
-            return Ok();
+        [HttpGet]
+        public IList<Admin> Get_Admin()
+        {
+            var Res = _contxt.Admins.ToList();
+            return Res;
         }
     }
 }

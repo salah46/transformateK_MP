@@ -39,17 +39,27 @@ namespace transformatek_MP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Point",
+                name: "Affectation",
                 columns: table => new
                 {
-                    Point_ID = table.Column<string>(type: "TEXT", nullable: false),
-                    Lat = table.Column<float>(type: "REAL", nullable: false),
-                    Lang = table.Column<float>(type: "REAL", nullable: false),
-                    Affectation_ID = table.Column<string>(type: "TEXT", nullable: false)
+                    Affectation_ID = table.Column<string>(type: "TEXT", nullable: false),
+                    Admin_ID = table.Column<int>(type: "INTEGER", nullable: false),
+                    AgentId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Point", x => x.Point_ID);
+                    table.PrimaryKey("PK_Affectation", x => x.Affectation_ID);
+                    table.ForeignKey(
+                        name: "FK_Affectation_Admins_Admin_ID",
+                        column: x => x.Admin_ID,
+                        principalTable: "Admins",
+                        principalColumn: "Admin_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Affectation_Agent_AgentId",
+                        column: x => x.AgentId,
+                        principalTable: "Agent",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -74,44 +84,6 @@ namespace transformatek_MP.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Affectation",
-                columns: table => new
-                {
-                    Affectation_ID = table.Column<string>(type: "TEXT", nullable: false),
-                    Admin_ID = table.Column<int>(type: "INTEGER", nullable: false),
-                    AgentId = table.Column<string>(type: "TEXT", nullable: true),
-                    Point_ID = table.Column<string>(type: "TEXT", nullable: false),
-                    Consigner_ID = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Affectation", x => x.Affectation_ID);
-                    table.ForeignKey(
-                        name: "FK_Affectation_Admins_Admin_ID",
-                        column: x => x.Admin_ID,
-                        principalTable: "Admins",
-                        principalColumn: "Admin_ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Affectation_Agent_AgentId",
-                        column: x => x.AgentId,
-                        principalTable: "Agent",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Affectation_Point_Affectation_ID",
-                        column: x => x.Affectation_ID,
-                        principalTable: "Point",
-                        principalColumn: "Point_ID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Affectation_Point_Point_ID",
-                        column: x => x.Point_ID,
-                        principalTable: "Point",
-                        principalColumn: "Point_ID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Consigner",
                 columns: table => new
                 {
@@ -131,6 +103,26 @@ namespace transformatek_MP.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Point",
+                columns: table => new
+                {
+                    Point_ID = table.Column<string>(type: "TEXT", nullable: false),
+                    Lat = table.Column<float>(type: "REAL", nullable: false),
+                    Lang = table.Column<float>(type: "REAL", nullable: false),
+                    Affectation_ID = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Point", x => x.Point_ID);
+                    table.ForeignKey(
+                        name: "FK_Point_Affectation_Affectation_ID",
+                        column: x => x.Affectation_ID,
+                        principalTable: "Affectation",
+                        principalColumn: "Affectation_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Affectation_Admin_ID",
                 table: "Affectation",
@@ -142,20 +134,14 @@ namespace transformatek_MP.Migrations
                 column: "AgentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Affectation_Consigner_ID",
-                table: "Affectation",
-                column: "Consigner_ID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Affectation_Point_ID",
-                table: "Affectation",
-                column: "Point_ID",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Consigner_Affectation_ID",
                 table: "Consigner",
+                column: "Affectation_ID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Point_Affectation_ID",
+                table: "Point",
                 column: "Affectation_ID",
                 unique: true);
 
@@ -163,48 +149,28 @@ namespace transformatek_MP.Migrations
                 name: "IX_Resultes_AgentId",
                 table: "Resultes",
                 column: "AgentId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Affectation_Consigner_Consigner_ID",
-                table: "Affectation",
-                column: "Consigner_ID",
-                principalTable: "Consigner",
-                principalColumn: "Consigner_ID",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Affectation_Admins_Admin_ID",
-                table: "Affectation");
+            migrationBuilder.DropTable(
+                name: "Consigner");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_Affectation_Agent_AgentId",
-                table: "Affectation");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Affectation_Consigner_Consigner_ID",
-                table: "Affectation");
+            migrationBuilder.DropTable(
+                name: "Point");
 
             migrationBuilder.DropTable(
                 name: "Resultes");
+
+            migrationBuilder.DropTable(
+                name: "Affectation");
 
             migrationBuilder.DropTable(
                 name: "Admins");
 
             migrationBuilder.DropTable(
                 name: "Agent");
-
-            migrationBuilder.DropTable(
-                name: "Consigner");
-
-            migrationBuilder.DropTable(
-                name: "Affectation");
-
-            migrationBuilder.DropTable(
-                name: "Point");
         }
     }
 }
