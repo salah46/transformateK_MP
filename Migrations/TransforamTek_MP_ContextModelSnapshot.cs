@@ -23,11 +23,11 @@ namespace transformatek_MP.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Famillyname")
+                    b.Property<string>("Famillyname_Admin")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Name_Admin")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -44,46 +44,36 @@ namespace transformatek_MP.Migrations
                     b.Property<int>("Admin_ID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AgentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Consigner_ID")
+                    b.Property<string>("AgentId_Agent")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Point_ID")
-                        .IsRequired()
+                    b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Affectation_ID");
 
                     b.HasIndex("Admin_ID");
 
-                    b.HasIndex("AgentId");
-
-                    b.HasIndex("Consigner_ID")
-                        .IsUnique();
-
-                    b.HasIndex("Point_ID")
-                        .IsUnique();
+                    b.HasIndex("AgentId_Agent");
 
                     b.ToTable("Affectation");
                 });
 
             modelBuilder.Entity("transformatek_MP.Models.Agent", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("Id_Agent")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Famillyname")
+                    b.Property<string>("Famillyname_Agent")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Name_Agent")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id_Agent");
 
                     b.ToTable("Agent");
                 });
@@ -129,6 +119,9 @@ namespace transformatek_MP.Migrations
 
                     b.HasKey("Point_ID");
 
+                    b.HasIndex("Affectation_ID")
+                        .IsUnique();
+
                     b.ToTable("Point");
                 });
 
@@ -137,8 +130,7 @@ namespace transformatek_MP.Migrations
                     b.Property<string>("Result_Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("AgentId")
-                        .IsRequired()
+                    b.Property<string>("AgentId_Agent")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("Date")
@@ -154,7 +146,7 @@ namespace transformatek_MP.Migrations
 
                     b.HasKey("Result_Id");
 
-                    b.HasIndex("AgentId");
+                    b.HasIndex("AgentId_Agent");
 
                     b.ToTable("Resultes");
                 });
@@ -167,35 +159,15 @@ namespace transformatek_MP.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("transformatek_MP.Models.Point", null)
-                        .WithOne("Affectation")
-                        .HasForeignKey("transformatek_MP.Models.Affectation", "Affectation_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("transformatek_MP.Models.Agent", "Agent")
                         .WithMany("Affectations")
-                        .HasForeignKey("AgentId");
-
-                    b.HasOne("transformatek_MP.Models.Consigner", "Consigner")
-                        .WithOne()
-                        .HasForeignKey("transformatek_MP.Models.Affectation", "Consigner_ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("transformatek_MP.Models.Point", "Point")
-                        .WithOne()
-                        .HasForeignKey("transformatek_MP.Models.Affectation", "Point_ID")
+                        .HasForeignKey("AgentId_Agent")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Admin");
 
                     b.Navigation("Agent");
-
-                    b.Navigation("Consigner");
-
-                    b.Navigation("Point");
                 });
 
             modelBuilder.Entity("transformatek_MP.Models.Consigner", b =>
@@ -209,13 +181,22 @@ namespace transformatek_MP.Migrations
                     b.Navigation("Affectation");
                 });
 
+            modelBuilder.Entity("transformatek_MP.Models.Point", b =>
+                {
+                    b.HasOne("transformatek_MP.Models.Affectation", "Affectation")
+                        .WithOne()
+                        .HasForeignKey("transformatek_MP.Models.Point", "Affectation_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Affectation");
+                });
+
             modelBuilder.Entity("transformatek_MP.Models.Resultes", b =>
                 {
                     b.HasOne("transformatek_MP.Models.Agent", "Agent")
                         .WithMany("Resultes")
-                        .HasForeignKey("AgentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AgentId_Agent");
 
                     b.Navigation("Agent");
                 });
@@ -230,12 +211,6 @@ namespace transformatek_MP.Migrations
                     b.Navigation("Affectations");
 
                     b.Navigation("Resultes");
-                });
-
-            modelBuilder.Entity("transformatek_MP.Models.Point", b =>
-                {
-                    b.Navigation("Affectation")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

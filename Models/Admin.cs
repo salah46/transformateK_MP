@@ -7,8 +7,8 @@ namespace transformatek_MP.Models
     {
         [Key]
         public int? Admin_ID { get; set; } // id of admin 
-        public string Name { get; set; }
-        public string Famillyname { get; set; }
+        public string Name_Admin { get; set; }
+        public string Famillyname_Admin { get; set; }
 
        public ICollection<Affectation> Affectations {get;set;} 
     }
