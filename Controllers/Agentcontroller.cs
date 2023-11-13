@@ -4,6 +4,11 @@ using System.Linq;
 using transformatek_MP.Data;
 using System.Threading.Tasks.Dataflow;
 using transformatek_MP.DTO;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Net.Http.Headers;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 namespace transformatek_MP.Controllers
 {
 
@@ -55,7 +60,7 @@ namespace transformatek_MP.Controllers
                       where a.Affectation_ID == affectation_id
                       select new AffectionDTO()
                       {
-                          Admin_ID = (int) a.Admin.Admin_ID,
+                          Admin_ID = (int)a.Admin.Admin_ID,
                           Agent_ID = a.Agent.Id_Agent,
                           Affectation_ID = a.Affectation_ID,
                           Description = a.Description,
@@ -71,14 +76,14 @@ namespace transformatek_MP.Controllers
             }
             return Ok(Res);
         }
-        [HttpGet]
+        [HttpGet("GetResultes")]
         public ActionResult<ResulteDTO> Get_resultes(string agent_id)
         {
             var res = from r in _contxt.Resultes
                       where r.Agent.Id_Agent == agent_id
                       select new ResulteDTO()
                       {
-                          Id_Agent = r.Agent.Id_Agent,
+                          Id_Agent = agent_id,
                           Result_Id = r.Result_Id,
                           Date = r.Date,
                           Mesuretype = r.Mesuretype,
@@ -90,5 +95,36 @@ namespace transformatek_MP.Controllers
             }
             return Ok(res);
         }
+
+        [HttpPost("{id:int}")]
+
+        public ActionResult postResultes([FromBody] ResulteDTO value, int id)
+        {
+            Resultes res = new Resultes()
+            {
+                Result_Id = Convert.ToString(Guid.NewGuid()), // Use GUID for Result_Id
+                Date = value.Date,
+                Mesuretype = value.Mesuretype,
+                Values = value.Values,
+                Agent = _contxt.Agent.Find(Convert.ToString(id))  /* handle null case */
+            };
+
+            _contxt.Add(res);
+            _contxt.SaveChanges();
+
+
+            value.Date = res.Date;
+            value.Id_Agent = res.Agent.Id_Agent;
+            value.Mesuretype = res.Mesuretype;
+            value.Result_Id = res.Result_Id;
+            value.Values = res.Values;
+            // Save changes to the database
+
+            return Ok(value);
+        }
+
+
+
+
     }
 }
