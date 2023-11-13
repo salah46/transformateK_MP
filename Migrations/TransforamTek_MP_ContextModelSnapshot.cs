@@ -44,18 +44,26 @@ namespace transformatek_MP.Migrations
                     b.Property<int>("Admin_ID")
                         .HasColumnType("INTEGER");
 
+<<<<<<< HEAD
                     b.Property<string>("AgentId_Agent")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+=======
+                    b.Property<string>("AgentId")
+>>>>>>> 98b2ede4e842378f7634f71ccf3039a7eb0fc39d
                         .HasColumnType("TEXT");
 
                     b.HasKey("Affectation_ID");
 
                     b.HasIndex("Admin_ID");
 
+<<<<<<< HEAD
                     b.HasIndex("AgentId_Agent");
+=======
+                    b.HasIndex("AgentId");
+>>>>>>> 98b2ede4e842378f7634f71ccf3039a7eb0fc39d
 
                     b.ToTable("Affectation");
                 });
@@ -161,9 +169,13 @@ namespace transformatek_MP.Migrations
 
                     b.HasOne("transformatek_MP.Models.Agent", "Agent")
                         .WithMany("Affectations")
+<<<<<<< HEAD
                         .HasForeignKey("AgentId_Agent")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+=======
+                        .HasForeignKey("AgentId");
+>>>>>>> 98b2ede4e842378f7634f71ccf3039a7eb0fc39d
 
                     b.Navigation("Admin");
 

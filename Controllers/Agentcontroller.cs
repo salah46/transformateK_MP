@@ -1,14 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using transformatek_MP.Models;
-using System.Linq;
 using transformatek_MP.Data;
-using System.Threading.Tasks.Dataflow;
 using transformatek_MP.DTO;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Net.Http.Headers;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
+
 namespace transformatek_MP.Controllers
 {
 
