@@ -39,7 +39,7 @@ Follow these steps to set up and run the project locally.
 
 1. **Clone the Repository:**
    ```bash
-   git clone (https://gitfront.io/r/user-1995900/kvf2NuUxNmKA/transformateK-MP.git)
+   git clone https://gitfront.io/r/user-1995900/kvf2NuUxNmKA/transformateK-MP.git
    ```
 
 2. **Build and Run:**
