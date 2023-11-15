@@ -52,12 +52,14 @@ Follow these steps to set up and run the project locally.
    - The project uses an embedded SQLite database. No additional configuration is required for the database setup.
 
 5. **Sample Data:**
-   -In the database, there are two agents and two administrators assigned with integer IDs 1 and 2.
+   - In the database, there are two agents and two administrators assigned with integer IDs 1 and 2.
       
 
 ## Additional Notes
 
 - Ensure that the necessary dependencies are installed before running the project.
+
+- The core requirements have been met successfully; however, there is an opportunity for further enhancements. For instance, incorporating functionalities for updating and deleting records would contribute to the project's overall completeness. Additionally, refining error handling mechanisms to accommodate diverse scenarios could further elevate the system's robustness and user experience.
 
 - For any questions or issues, please refer to the documentation or contact the project maintainers.
 
