@@ -19,7 +19,7 @@ namespace transformatek_MP.Migrations
 
             modelBuilder.Entity("transformatek_MP.Models.Admin", b =>
                 {
-                    b.Property<int?>("Admin_ID")
+                    b.Property<int>("Admin_ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -38,40 +38,33 @@ namespace transformatek_MP.Migrations
 
             modelBuilder.Entity("transformatek_MP.Models.Affectation", b =>
                 {
-                    b.Property<string>("Affectation_ID")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Affectation_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Admin_ID")
                         .HasColumnType("INTEGER");
 
-<<<<<<< HEAD
-                    b.Property<string>("AgentId_Agent")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("AgentId_Agent")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
-=======
-                    b.Property<string>("AgentId")
->>>>>>> 98b2ede4e842378f7634f71ccf3039a7eb0fc39d
                         .HasColumnType("TEXT");
 
                     b.HasKey("Affectation_ID");
 
                     b.HasIndex("Admin_ID");
 
-<<<<<<< HEAD
                     b.HasIndex("AgentId_Agent");
-=======
-                    b.HasIndex("AgentId");
->>>>>>> 98b2ede4e842378f7634f71ccf3039a7eb0fc39d
 
                     b.ToTable("Affectation");
                 });
 
             modelBuilder.Entity("transformatek_MP.Models.Agent", b =>
                 {
-                    b.Property<string>("Id_Agent")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Id_Agent")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Famillyname_Agent")
                         .IsRequired()
@@ -91,9 +84,8 @@ namespace transformatek_MP.Migrations
                     b.Property<string>("Consigner_ID")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Affectation_ID")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Affectation_ID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("Nb_Repetations")
                         .HasColumnType("INTEGER");
@@ -115,9 +107,8 @@ namespace transformatek_MP.Migrations
                     b.Property<string>("Point_ID")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Affectation_ID")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Affectation_ID")
+                        .HasColumnType("INTEGER");
 
                     b.Property<float>("Lang")
                         .HasColumnType("REAL");
@@ -135,11 +126,15 @@ namespace transformatek_MP.Migrations
 
             modelBuilder.Entity("transformatek_MP.Models.Resultes", b =>
                 {
-                    b.Property<string>("Result_Id")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Result_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("AgentId_Agent")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Affectation_ID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AgentId_Agent")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
@@ -153,6 +148,8 @@ namespace transformatek_MP.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Result_Id");
+
+                    b.HasIndex("Affectation_ID");
 
                     b.HasIndex("AgentId_Agent");
 
@@ -169,13 +166,9 @@ namespace transformatek_MP.Migrations
 
                     b.HasOne("transformatek_MP.Models.Agent", "Agent")
                         .WithMany("Affectations")
-<<<<<<< HEAD
                         .HasForeignKey("AgentId_Agent")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-=======
-                        .HasForeignKey("AgentId");
->>>>>>> 98b2ede4e842378f7634f71ccf3039a7eb0fc39d
 
                     b.Navigation("Admin");
 
@@ -206,9 +199,19 @@ namespace transformatek_MP.Migrations
 
             modelBuilder.Entity("transformatek_MP.Models.Resultes", b =>
                 {
+                    b.HasOne("transformatek_MP.Models.Affectation", "Affectation")
+                        .WithMany()
+                        .HasForeignKey("Affectation_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("transformatek_MP.Models.Agent", "Agent")
                         .WithMany("Resultes")
-                        .HasForeignKey("AgentId_Agent");
+                        .HasForeignKey("AgentId_Agent")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Affectation");
 
                     b.Navigation("Agent");
                 });

@@ -6,7 +6,7 @@ namespace transformatek_MP.Models
     public string Famillyname_Agent { get; set; }
     // this is the ID
     [Key]
-    public string? Id_Agent { get; set; }
+    public int Id_Agent { get; set; }
 
     public ICollection<Resultes> Resultes {get;set;}
     public ICollection<Affectation> Affectations {get;set;}

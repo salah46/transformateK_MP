@@ -16,9 +16,9 @@ namespace transformatek_MP.Controllers
             _contxt = contxt;
         }
 
-        [HttpGet("{agent_id:alpha}")]
+        [HttpGet("Get_Affections{agent_id:int}")]
 
-        public ActionResult<IEnumerable<AffectionDTO>> Get_Affections(string agent_id)
+        public ActionResult<IEnumerable<AffectionDTO>> Get_Affections(int agent_id)
         {
             var res = from a in _contxt.Affectation
                       join p in _contxt.Point on a.Affectation_ID equals p.Affectation_ID
@@ -26,9 +26,9 @@ namespace transformatek_MP.Controllers
                       where a.Agent.Id_Agent == agent_id
                       select new AffectionDTO()
                       {
-                          Admin_ID = (int)a.Admin.Admin_ID,
+                          Admin_ID = a.Admin.Admin_ID,
                           Agent_ID = a.Agent.Id_Agent,
-                          Affectation_ID = a.Affectation_ID,
+                          Affectation_ID = Convert.ToString(a.Affectation_ID),
                           Description = a.Description,
                           Point_ID = p.Point_ID,
                           Lang = p.Lang,
@@ -37,14 +37,14 @@ namespace transformatek_MP.Controllers
                           Type_mesure = c.Type_mesure
                       };
             ;
-            if (res != null)
+            if (res == null)
             {
                 return NotFound(new { Error = "Affections not found" });
             }
             return Ok(res);
         }
-        [HttpGet("{affectation_id:alpha}/{agent_id:alpha}")]
-        public ActionResult<AffectionDTO> Get_AffectaionById(string agent_id, string affectation_id)
+        [HttpGet("Get_Affectation_By_Id{affectation_id:int}/{agent_id:int}")]
+        public ActionResult<AffectionDTO> Get_AffectaionById(int agent_id, int affectation_id)
         {
             var Res = from a in _contxt.Affectation
                       join p in _contxt.Point on a.Affectation_ID equals p.Affectation_ID
@@ -56,9 +56,10 @@ namespace transformatek_MP.Controllers
                       {
                           Admin_ID = (int)a.Admin.Admin_ID,
                           Agent_ID = a.Agent.Id_Agent,
-                          Affectation_ID = a.Affectation_ID,
+                          Affectation_ID = Convert.ToString(a.Affectation_ID),
                           Description = a.Description,
                           Point_ID = p.Point_ID,
+                          Conseigner_ID = Convert.ToString(c.Consigner_ID),
                           Lang = p.Lang,
                           Lat = p.Lat,
                           Nb_Repetations = c.Nb_Repetations,
@@ -70,18 +71,20 @@ namespace transformatek_MP.Controllers
             }
             return Ok(Res);
         }
-        [HttpGet("GetResultes")]
-        public ActionResult<ResulteDTO> Get_resultes(string agent_id)
+
+        [HttpGet("Get_All_Resultes")]
+        public ActionResult<ResulteDTO> Get_resultes(int agent_id)
         {
             var res = from r in _contxt.Resultes
                       where r.Agent.Id_Agent == agent_id
                       select new ResulteDTO()
                       {
                           Id_Agent = agent_id,
-                          Result_Id = r.Result_Id,
+                          Result_Id = Convert.ToString(r.Result_Id),
                           Date = r.Date,
                           Mesuretype = r.Mesuretype,
                           Values = r.Values,
+                          Id_Affection = r.Affectation.Affectation_ID
                       };
             if (res == null)
             {
@@ -90,29 +93,28 @@ namespace transformatek_MP.Controllers
             return Ok(res);
         }
 
-        [HttpPost("{id:int}")]
+        [HttpPost("PostResultes")]
 
-        public ActionResult postResultes([FromBody] ResulteDTO value, int id)
+        public async Task<ActionResult<ResulteDTO>> PostResultes([FromBody] ResulteDTO value)
         {
+            var lastResult = _contxt.Resultes.OrderByDescending(s => s.Result_Id).FirstOrDefault();
+
+            int a = lastResult != null ? lastResult.Result_Id : 0;
+
             Resultes res = new Resultes()
             {
-                Result_Id = Convert.ToString(Guid.NewGuid()), // Use GUID for Result_Id
+                Result_Id = a+1,
                 Date = value.Date,
                 Mesuretype = value.Mesuretype,
                 Values = value.Values,
-                Agent = _contxt.Agent.Find(Convert.ToString(id))  /* handle null case */
+                Agent = _contxt.Agent.Find(value.Id_Agent),
+                Affectation = _contxt.Affectation.Find(value.Id_Affection)  
             };
 
-            _contxt.Add(res);
-            _contxt.SaveChanges();
-
-
-            value.Date = res.Date;
-            value.Id_Agent = res.Agent.Id_Agent;
-            value.Mesuretype = res.Mesuretype;
-            value.Result_Id = res.Result_Id;
-            value.Values = res.Values;
-            // Save changes to the database
+            await _contxt.AddAsync(res);
+            await _contxt.SaveChangesAsync();
+            value.Result_Id = Convert.ToString(a + 1);
+            
 
             return Ok(value);
         }

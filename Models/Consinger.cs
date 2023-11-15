@@ -8,7 +8,7 @@ namespace transformatek_MP.Models
         public string Type_mesure { get; set; }
         public int Nb_Repetations { get; set; }
 
-        public string Affectation_ID { get; set; }//Foreign key prop
+        public int Affectation_ID { get; set; }//Foreign key prop
         public Affectation Affectation { get; set; } //ID
 
 

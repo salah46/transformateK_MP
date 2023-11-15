@@ -8,7 +8,7 @@ namespace transformatek_MP.Models
         public float Lat { get; set; }
         public float Lang { get; set; }
 
-        public string Affectation_ID { get; set; }//Foreign key prop
+        public int Affectation_ID { get; set; }//Foreign key prop
         public Affectation Affectation { get; set; }
 
     }
