@@ -19,8 +19,8 @@ This project implements a system with the following key features:
 ## Technologies Used
 
 
-- C#
--.NET Core
+- C#.
+- Dotnet Core
 - Entity Framework (EF) Framework
 - LINQ Expressions
 - Data Transfer Object (DTO) Encapsulation
